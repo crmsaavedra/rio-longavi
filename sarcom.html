@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SARCOM — Sistema de Alerta y Registro de Canales en Orden de Monitoreo. Datos en tiempo real del Río Longaví." />
+  <title>SARCOM — Datos en Tiempo Real · Río Longaví</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ---- SARCOM page specific styles ---- */
+    .sarcom-page__intro {
+      background: var(--color-bg-dark);
+      color: #fff;
+      padding-block: var(--space-md);
+      position: relative;
+      overflow: hidden;
+    }
+    .sarcom-page__intro::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1400&q=50');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.1;
+    }
+    .sarcom-intro-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .sarcom-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.9rem;
+      background: rgba(0,207,232,0.15);
+      border: 1px solid rgba(0,207,232,0.3);
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+    }
+    .sarcom-badge__dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #2ECC71;
+      animation: blink 1.5s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .sarcom-time {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.45);
+      margin-left: auto;
+    }
+
+    /* Metric value (large display) */
+    .metric-card__value {
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+    }
+
+    /* Chart section */
+    .chart-wrap {
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+    }
+
+    .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: var(--space-sm);
+    }
+
+    .chart-title {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-primary);
+    }
+
+    .chart-legend {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+    }
+
+    .chart-legend__item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .chart-legend__line {
+      width: 20px; height: 2.5px;
+      border-radius: 2px;
+    }
+
+    canvas#freaticChart {
+      width: 100%;
+      height: 260px;
+      display: block;
+    }
+
+    /* Search bar */
+    .sarcom-search {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--color-bg-alt);
+      border: 1.5px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 0.5rem 1rem;
+      max-width: 320px;
+      transition: border-color var(--transition);
+    }
+    .sarcom-search:focus-within { border-color: var(--color-primary); }
+    .sarcom-search input {
+      border: none; background: none; outline: none;
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      color: var(--color-text);
+      flex: 1;
+    }
+    .sarcom-search input::placeholder { color: var(--color-text-muted); }
+    .sarcom-search span { color: var(--color-text-muted); }
+  </style>
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <main class="page-content">
+
+    <!-- PAGE HERO -->
+    <section class="page-hero" aria-label="SARCOM">
+      <div class="page-hero__bg" style="background-image:url('https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1400&q=70')" role="img" aria-label="Vista aérea del Río Longaví"></div>
+      <div class="page-hero__overlay"></div>
+      <div class="container page-hero__content">
+        <nav class="page-hero__breadcrumb" aria-label="Miga de pan">
+          <a href="index.html">Inicio</a>
+          <span aria-hidden="true">›</span>
+          <span aria-current="page">SARCOM</span>
+        </nav>
+        <h1 class="page-hero__title">SARCOM</h1>
+      </div>
+    </section>
+
+    <!-- STATUS BANNER -->
+    <div class="sarcom-page__intro" role="region" aria-label="Estado del sistema">
+      <div class="container">
+        <div class="sarcom-intro-inner">
+          <div class="sarcom-badge">
+            <span class="sarcom-badge__dot" aria-label="Sistema activo"></span>
+            Sistema Activo
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0.15rem">
+            <span style="font-family:var(--font-display);font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.5)">Sistema de Alerta y Registro de Canales</span>
+            <span style="font-family:var(--font-display);font-size:1rem;font-weight:700;color:#fff">Plataforma de Monitoreo en Tiempo Real</span>
+          </div>
+          <div class="sarcom-time" id="liveTime" aria-live="polite" aria-label="Hora actual">--:--</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- METRICS + SEARCH -->
+    <section class="section" aria-labelledby="metrics-title">
+      <div class="container">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:var(--space-md)">
+          <div>
+            <span class="tag-label">Tiempo Real</span>
+            <h2 id="metrics-title" style="font-size:1.4rem">Métricas en Tiempo Real</h2>
+          </div>
+          <div class="sarcom-search" role="search">
+            <span aria-hidden="true">🔍</span>
+            <input type="search" placeholder="Buscar canal o sensor…" aria-label="Buscar canal o sensor" />
+          </div>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="metrics__grid reveal">
+          <div class="metric-card" role="region" aria-label="Caudal de agua">
+            <div class="metric-card__value" 
+                 data-value="-245.34" 
+                 data-suffix=" l/s"
+                 aria-live="polite">–245.34 l/s</div>
+            <div class="metric-card__label">Caudal de Agua</div>
+            <a href="#" class="btn btn--outline" 
+               style="margin-top:0.75rem;padding:0.4rem 0.9rem;font-size:0.72rem;border-color:rgba(255,255,255,0.35);color:#fff"
+               aria-label="Más información sobre caudal">
+              Más Información ↗
+            </a>
+          </div>
+
+          <div class="metric-card metric-card--cyan" role="region" aria-label="Volumen de agua">
+            <div class="metric-card__value"
+                 data-value="945643"
+                 data-suffix=" m³"
+                 aria-live="polite">945,643 m³</div>
+            <div class="metric-card__label">Volumen de Agua</div>
+            <a href="#" class="btn btn--outline"
+               style="margin-top:0.75rem;padding:0.4rem 0.9rem;font-size:0.72rem;border-color:rgba(255,255,255,0.35);color:#fff"
+               aria-label="Más información sobre volumen">
+              Más Información ↗
+            </a>
+          </div>
+
+          <div class="metric-card metric-card--teal" role="region" aria-label="Columna de agua">
+            <div class="metric-card__value"
+                 data-value="150"
+                 data-suffix=" m"
+                 aria-live="polite">150 m</div>
+            <div class="metric-card__label">Columna de Agua</div>
+            <a href="#" class="btn btn--outline"
+               style="margin-top:0.75rem;padding:0.4rem 0.9rem;font-size:0.72rem;border-color:rgba(255,255,255,0.35);color:#fff"
+               aria-label="Más información sobre columna">
+              Más Información ↗
+            </a>
+          </div>
+
+          <div class="metric-card metric-card--dark" role="region" aria-label="Última actualización">
+            <div class="metric-card__value" style="font-size:1.1rem" id="lastUpdate" aria-live="polite">
+              Hace 2 Minutos
+            </div>
+            <div class="metric-card__label">Última Actualización</div>
+            <a href="#" class="btn btn--outline"
+               style="margin-top:0.75rem;padding:0.4rem 0.9rem;font-size:0.72rem;border-color:rgba(0,180,216,0.35);color:var(--color-accent)"
+               aria-label="Más información sobre actualización">
+              Más Información ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- Freatic Chart -->
+        <div class="chart-wrap reveal" style="margin-top:var(--space-md)" role="region" aria-labelledby="chart-title">
+          <div class="chart-header">
+            <h3 class="chart-title" id="chart-title">📊 Nivel Freático de Agua</h3>
+            <div class="chart-legend" aria-label="Leyenda del gráfico">
+              <div class="chart-legend__item">
+                <div class="chart-legend__line" style="background:#0077B6"></div>
+                <span>Nivel actual</span>
+              </div>
+              <div class="chart-legend__item">
+                <div class="chart-legend__line" style="background:#E74C3C;border-top:2px dashed #E74C3C"></div>
+                <span>Nivel de alerta (−99)</span>
+              </div>
+            </div>
+          </div>
+          <canvas id="freaticChart" aria-label="Gráfico de nivel freático de agua — últimas horas"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT SARCOM -->
+    <section class="section section--alt" aria-labelledby="about-sarcom-title">
+      <div class="container">
+        <div class="section__header reveal">
+          <span class="tag-label">¿Qué es SARCOM?</span>
+          <h2 id="about-sarcom-title">Sistema de Alerta y Registro<br>de Canales</h2>
+          <p>Tecnología de monitoreo hídrico pensada para el Río Longaví y sus comunidades de regantes.</p>
+        </div>
+
+        <div class="sarcom__grid" style="--color-bg-dark:#F4F8FB">
+          <div class="sarcom__benefit reveal" style="background:var(--color-card-bg);border-color:var(--color-border)">
+            <div class="sarcom__benefit-icon">🛰️</div>
+            <div class="sarcom__benefit-content">
+              <h4 style="color:var(--color-primary)">Transmisión GPRS/Satélite</h4>
+              <p style="color:var(--color-text-muted)">Conectividad robusta incluso en zonas remotas de la cuenca del Río Longaví.</p>
+            </div>
+          </div>
+          <div class="sarcom__benefit reveal reveal--delay-1" style="background:var(--color-card-bg);border-color:var(--color-border)">
+            <div class="sarcom__benefit-icon">📏</div>
+            <div class="sarcom__benefit-content">
+              <h4 style="color:var(--color-primary)">Sensores Ultrasónicos</h4>
+              <p style="color:var(--color-text-muted)">Medición de caudal sin contacto con el agua, alta durabilidad y precisión.</p>
+            </div>
+          </div>
+          <div class="sarcom__benefit reveal reveal--delay-2" style="background:var(--color-card-bg);border-color:var(--color-border)">
+            <div class="sarcom__benefit-icon">🔄</div>
+            <div class="sarcom__benefit-content">
+              <h4 style="color:var(--color-primary)">Actualización Continua</h4>
+              <p style="color:var(--color-text-muted)">Datos actualizados cada 10 minutos con registro histórico accesible en todo momento.</p>
+            </div>
+          </div>
+          <div class="sarcom__benefit reveal reveal--delay-3" style="background:var(--color-card-bg);border-color:var(--color-border)">
+            <div class="sarcom__benefit-icon">⚡</div>
+            <div class="sarcom__benefit-content">
+              <h4 style="color:var(--color-primary)">Energía Solar</h4>
+              <p style="color:var(--color-text-muted)">Estaciones alimentadas con paneles solares para operación autónoma y sostenible.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="footer-placeholder"></div>
+  <script src="js/components.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    /* Live time updater */
+    const timeEl = document.getElementById('liveTime');
+    const updateTime = () => {
+      if (!timeEl) return;
+      const now = new Date();
+      timeEl.textContent = `Actualizado: ${now.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })}`;
+    };
+    updateTime();
+    setInterval(updateTime, 60000);
+  </script>
+</body>
+</html>

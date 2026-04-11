@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Proyectos de Río Longaví — Galería de obras de telemetría, construcción y consultoría hídrica en el Maule." />
+  <title>Proyectos — Río Longaví</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* Filter tabs */
+    .filter-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: var(--space-md);
+      justify-content: center;
+    }
+    .filter-tab {
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      border: 1.5px solid var(--color-border);
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      background: var(--color-bg);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .filter-tab:hover,
+    .filter-tab.is-active {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #fff;
+    }
+
+    /* Stats ribbon */
+    .projects-stat {
+      text-align: center;
+      padding: var(--space-md);
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+      color: #fff;
+    }
+    .projects-stat p {
+      font-family: var(--font-display);
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .projects-stat em {
+      font-style: normal;
+      color: var(--color-accent);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <main class="page-content">
+
+    <!-- PAGE HERO -->
+    <section class="page-hero" aria-label="Proyectos">
+      <div class="page-hero__bg" style="background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1400&q=70')" role="img" aria-label="Río Longaví entre montañas"></div>
+      <div class="page-hero__overlay"></div>
+      <div class="container page-hero__content">
+        <nav class="page-hero__breadcrumb" aria-label="Miga de pan">
+          <a href="index.html">Inicio</a>
+          <span aria-hidden="true">›</span>
+          <span aria-current="page">Proyectos</span>
+        </nav>
+        <h1 class="page-hero__title">Proyectos</h1>
+      </div>
+    </section>
+
+    <!-- STATS RIBBON -->
+    <div class="projects-stat" role="region" aria-label="Logros">
+      <p>Más de <em>500 km</em> de canales monitoreados &nbsp;·&nbsp; Reducción del <em>30%</em> en pérdidas de agua</p>
+    </div>
+
+    <!-- GALLERY -->
+    <section class="section" aria-labelledby="gallery-title">
+      <div class="container">
+        <div class="section__header reveal">
+          <span class="tag-label">Nuestro Trabajo</span>
+          <h2 id="gallery-title">Galería de Proyectos</h2>
+          <p>Cada proyecto representa un paso hacia la gestión eficiente y transparente del agua en el Maule.</p>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs reveal" role="tablist" aria-label="Filtrar proyectos">
+          <button class="filter-tab is-active" data-filter="all" role="tab" aria-selected="true">Todos</button>
+          <button class="filter-tab" data-filter="telemetria" role="tab" aria-selected="false">Telemetría</button>
+          <button class="filter-tab" data-filter="construccion" role="tab" aria-selected="false">Construcción</button>
+          <button class="filter-tab" data-filter="consultoria" role="tab" aria-selected="false">Consultoría</button>
+          <button class="filter-tab" data-filter="comunidad" role="tab" aria-selected="false">Comunidad</button>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="projects__grid" id="projectsGrid">
+
+          <!-- Each card has data-category for filter -->
+          <article class="project-card reveal" data-category="telemetria" aria-label="Monitoreo Río Longaví — Telemetría">
+            <img class="project-card__img"
+                 src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=70"
+                 alt="Vista aérea del Río Longaví — Proyecto de monitoreo" loading="lazy" />
+            <div class="project-card__overlay">
+              <p class="project-card__label">Telemetría</p>
+              <h3 class="project-card__title">Monitoreo Río Longaví</h3>
+              <p class="project-card__client">Cliente: JVRM</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal reveal--delay-1" data-category="construccion" aria-label="Canal Principal Norte — Construcción">
+            <img class="project-card__img"
+                 src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=70"
+                 alt="Canal Norte — Montañas nevadas del Maule" loading="lazy" />
+            <div class="project-card__overlay">
+              <p class="project-card__label">Construcción</p>
+              <h3 class="project-card__title">Canal Principal Norte</h3>
+              <p class="project-card__client">Cliente: JVRM</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal reveal--delay-2" data-category="consultoria" aria-label="Asesoría Junta de Vigilancia">
+            <img class="project-card__img"
+                 src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&q=70"
+                 alt="Río Longaví en valle — Proyecto consultoría" loading="lazy" />
+            <div class="project-card__overlay">
+              <p class="project-card__label">Consultoría</p>
+              <h3 class="project-card__title">Asesoría Junta Vigilancia</h3>
+              <p class="project-card__client">Cliente: JVRM</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal" data-category="telemetria" aria-label="Red Sensores SARCOM">
+            <img class="project-card__img"
+                 src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=70"
+                 alt="Bosque y río — Red de sensores SARCOM" loading="lazy" />
+            <div class="project-card__overlay">
+              <p class="project-card__label">Telemetría</p>
+              <h3 class="project-card__title">Red Sensores SARCOM</h3>
+              <p class="project-card__client">Cliente: JVRM</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal reveal--delay-1" data-category="construccion" aria-label="Revestimiento Canal Sur">
+            <img class="project-card__img"
+                 src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=70"
+                 alt="Paisaje montañoso del Maule — Canal Sur" loading="lazy" />
+            <div class="project-card__overlay">
+              <p class="project-card__label">Construcción</p>
+              <h3 class="project-card__title">Revestimiento Canal Sur</h3>
+              <p class="project-card__client">Cliente: JVRM</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal reveal--delay-2" data-category="comunidad" aria-label="Capacitación Regantes">
+            <img class="project-card__img"
+                 src="https://images.unsplash.com/photo-1511884642898-4c92249e20b6?w=600&q=70"
+                 alt="Montaña y lago — Proyecto comunidad" loading="lazy" />
+            <div class="project-card__overlay">
+              <p class="project-card__label">Comunidad</p>
+              <h3 class="project-card__title">Capacitación Regantes</h3>
+              <p class="project-card__client">Cliente: JVRM</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal" data-category="telemetria" aria-label="Sistema Medición Caudal">
+            <img class="project-card__img"
+                 src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=600&q=70"
+                 alt="Embalse del Río Longaví — Medición de caudal" loading="lazy" />
+            <div class="project-card__overlay">
+              <p class="project-card__label">Telemetría</p>
+              <h3 class="project-card__title">Sistema Medición Caudal</h3>
+              <p class="project-card__client">Cliente: JVRM</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal reveal--delay-1" data-category="construccion" aria-label="Marco de Partida Sector 3">
+            <img class="project-card__img"
+                 src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600&q=70"
+                 alt="Montaña nevada — Marco de partida" loading="lazy" />
+            <div class="project-card__overlay">
+              <p class="project-card__label">Construcción</p>
+              <h3 class="project-card__title">Marco de Partida Sector 3</h3>
+              <p class="project-card__client">Cliente: JVRM</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal reveal--delay-2" data-category="consultoria" aria-label="Catastro Usuarios de Agua">
+            <img class="project-card__img"
+                 src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=600&q=70"
+                 alt="Cascada y río — Catastro usuarios de agua" loading="lazy" />
+            <div class="project-card__overlay">
+              <p class="project-card__label">Consultoría</p>
+              <h3 class="project-card__title">Catastro Usuarios de Agua</h3>
+              <p class="project-card__client">Cliente: JVRM</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal" data-category="comunidad" aria-label="Taller Operación SARCOM">
+            <img class="project-card__img"
+                 src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=70"
+                 alt="Paisaje verde — Taller operación SARCOM" loading="lazy" />
+            <div class="project-card__overlay">
+              <p class="project-card__label">Comunidad</p>
+              <h3 class="project-card__title">Taller Operación SARCOM</h3>
+              <p class="project-card__client">Cliente: JVRM</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal reveal--delay-1" data-category="telemetria" aria-label="Nivel Freático Sector Norte">
+            <img class="project-card__img"
+                 src="https://images.unsplash.com/photo-1446329813274-7c9036bd9a1f?w=600&q=70"
+                 alt="Lago de montaña — Nivel freático" loading="lazy" />
+            <div class="project-card__overlay">
+              <p class="project-card__label">Telemetría</p>
+              <h3 class="project-card__title">Nivel Freático Sector Norte</h3>
+              <p class="project-card__client">Cliente: JVRM</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal reveal--delay-2" data-category="construccion" aria-label="Compuerta Automatizada">
+            <img class="project-card__img"
+                 src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&q=70"
+                 alt="Río entre montañas — Compuerta automatizada" loading="lazy" />
+            <div class="project-card__overlay">
+              <p class="project-card__label">Construcción</p>
+              <h3 class="project-card__title">Compuerta Automatizada</h3>
+              <p class="project-card__client">Cliente: JVRM</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal" data-category="consultoria" aria-label="Elaboración de Estatutos">
+            <img class="project-card__img"
+                 src="https://images.unsplash.com/photo-1418065460487-3e41a6c84dc5?w=600&q=70"
+                 alt="Bosque otoñal — Elaboración estatutos" loading="lazy" />
+            <div class="project-card__overlay">
+              <p class="project-card__label">Consultoría</p>
+              <h3 class="project-card__title">Elaboración de Estatutos</h3>
+              <p class="project-card__client">Cliente: JVRM</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal reveal--delay-1" data-category="comunidad" aria-label="Vinculación Social">
+            <img class="project-card__img"
+                 src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=70"
+                 alt="Comunidad — Programa vinculación social" loading="lazy" />
+            <div class="project-card__overlay">
+              <p class="project-card__label">Comunidad</p>
+              <h3 class="project-card__title">Vinculación Social</h3>
+              <p class="project-card__client">Cliente: JVRM</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal reveal--delay-2" data-category="telemetria" aria-label="Volumen Embalse Longaví">
+            <img class="project-card__img"
+                 src="https://images.unsplash.com/photo-1505144808419-1957a94ca61e?w=600&q=70"
+                 alt="Embalse Longaví — Medición de volumen" loading="lazy" />
+            <div class="project-card__overlay">
+              <p class="project-card__label">Telemetría</p>
+              <h3 class="project-card__title">Volumen Embalse Longaví</h3>
+              <p class="project-card__client">Cliente: JVRM</p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section section--alt" style="text-align:center">
+      <div class="container reveal">
+        <span class="tag-label">¿Tu próximo proyecto?</span>
+        <h2 style="margin:var(--space-xs) 0 var(--space-sm)">Hagamos algo juntos</h2>
+        <a href="contacto.html" class="btn btn--primary">
+          Solicitar cotización <span class="btn__arrow">→</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="footer-placeholder"></div>
+  <script src="js/components.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    /* ---- Filter Tabs ---- */
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabs  = document.querySelectorAll('.filter-tab');
+      const cards = document.querySelectorAll('.project-card');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const filter = tab.getAttribute('data-filter');
+
+          // Update active tab
+          tabs.forEach(t => { t.classList.remove('is-active'); t.setAttribute('aria-selected','false'); });
+          tab.classList.add('is-active');
+          tab.setAttribute('aria-selected','true');
+
+          // Filter cards
+          cards.forEach(card => {
+            const cat = card.getAttribute('data-category');
+            const show = filter === 'all' || cat === filter;
+            card.style.display = show ? '' : 'none';
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>
