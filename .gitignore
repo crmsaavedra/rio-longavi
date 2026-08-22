@@ -1,0 +1,12 @@
+﻿# Ignorar archivos pesados y fuentes originales no usadas en la web
+*.MOV
+*.mov
+*.zip
+*.HEIC
+*.ai
+*.psd
+*.pdf
+Recursos/Videos varios/
+Recursos/Logotipo Río Longaví/
+*.mp4
+*.MP4

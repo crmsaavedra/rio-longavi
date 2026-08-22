@@ -1,378 +1,154 @@
-/* ============================================================
-   RÍO LONGAVÍ — Global JavaScript (ES6+ Vanilla)
-   ============================================================ */
+// Río Longaví — comportamiento compartido del sitio
+document.addEventListener('DOMContentLoaded', () => {
 
-'use strict';
-
-/* --- Helpers --- */
-const qs  = (sel, ctx = document) => ctx.querySelector(sel);
-const qsa = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
-
-/* ============================================================
-   1. THEME (Light / Dark)
-   ============================================================ */
-const ThemeManager = (() => {
-  const KEY = 'rl-theme';
-  const root = document.documentElement;
-
-  const apply = (theme) => {
-    root.setAttribute('data-theme', theme);
-    localStorage.setItem(KEY, theme);
-    // Update toggle icons
-    qsa('[data-theme-icon]').forEach(el => {
-      el.textContent = theme === 'dark' ? '☀️' : '🌙';
+  // Menú móvil
+  const navToggle = document.querySelector('.nav-toggle');
+  const nav = document.querySelector('.nav');
+  if (navToggle && nav) {
+    navToggle.addEventListener('click', () => {
+      nav.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', nav.classList.contains('open'));
     });
-    qsa('[data-theme-label]').forEach(el => {
-      el.textContent = theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro';
+    nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
+  }
+
+
+  // Acordeón de preguntas frecuentes
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const q = item.querySelector('.faq-q');
+    q && q.addEventListener('click', () => {
+      const wasOpen = item.classList.contains('open');
+      item.parentElement.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
     });
-  };
+  });
 
-  const toggle = () => {
-    const current = root.getAttribute('data-theme') || 'light';
-    apply(current === 'dark' ? 'light' : 'dark');
-  };
-
-  const init = () => {
-    // Check saved preference, then system preference
-    const saved = localStorage.getItem(KEY);
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    apply(saved || (prefersDark ? 'dark' : 'light'));
-
-    // Wire toggles
-    qsa('[data-theme-toggle]').forEach(btn => {
-      btn.addEventListener('click', toggle);
-    });
-  };
-
-  return { init, toggle };
-})();
-
-/* ============================================================
-   2. NAVBAR
-   ============================================================ */
-const Navbar = (() => {
-  const init = () => {
-    const navbar = qs('.navbar');
-    if (!navbar) return;
-
-    const hamburger = qs('.navbar__hamburger');
-    const mobileMenu = qs('.navbar__mobile-menu');
-
-    // Scrolled state
-    const onScroll = () => {
-      navbar.classList.toggle('navbar--scrolled', window.scrollY > 40);
-      BackToTop.toggle(window.scrollY > 400);
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-
-    // Mobile menu toggle
-    if (hamburger && mobileMenu) {
-      hamburger.addEventListener('click', () => {
-        const open = hamburger.classList.toggle('is-open');
-        mobileMenu.classList.toggle('is-open', open);
-        document.body.style.overflow = open ? 'hidden' : '';
+  // Filtro de proyectos
+  const pills = document.querySelectorAll('.filter-pill');
+  const cards = document.querySelectorAll('.project-card');
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const cat = pill.dataset.filter;
+      cards.forEach(card => {
+        card.style.display = (cat === 'todos' || card.dataset.cat === cat) ? '' : 'none';
       });
+    });
+  });
 
-      // Close on link click
-      qsa('.navbar__mobile-link', mobileMenu).forEach(link => {
-        link.addEventListener('click', () => {
-          hamburger.classList.remove('is-open');
-          mobileMenu.classList.remove('is-open');
-          document.body.style.overflow = '';
-        });
-      });
+  // Generar barras de forma de onda (entrevista)
+  document.querySelectorAll('.waveform').forEach(wf => {
+    const bars = 46;
+    let html = '';
+    for (let i = 0; i < bars; i++) {
+      const h = 8 + Math.round(Math.abs(Math.sin(i * 0.7)) * 40 + Math.random() * 10);
+      html += `<span style="height:${h}px"></span>`;
     }
+    wf.innerHTML = html;
+  });
 
-    // Active link
-    const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-    qsa('.navbar__link, .navbar__mobile-link').forEach(link => {
-      const href = link.getAttribute('href') || '';
-      if (href === currentPath || (currentPath === '' && href === 'index.html')) {
-        link.classList.add('is-active');
+  // Reproductor de audio real
+  const audioEl = document.getElementById('entrevista-audio');
+  const playBtn = document.getElementById('audio-play-btn');
+  const progressBar = document.getElementById('audio-progress');
+  const progressFill = document.getElementById('audio-progress-fill');
+  const timeCurrent = document.getElementById('audio-current');
+  const timeDuration = document.getElementById('audio-duration');
+
+  if (audioEl && playBtn) {
+    const playIcon = playBtn.querySelector('[data-play]');
+    const pauseIcon = playBtn.querySelector('[data-pause]');
+
+    const formatTime = (time) => {
+      if (isNaN(time)) return '0:00';
+      const m = Math.floor(time / 60);
+      const s = Math.floor(time % 60);
+      return `${m}:${s.toString().padStart(2, '0')}`;
+    };
+
+    audioEl.addEventListener('loadedmetadata', () => {
+      timeDuration.textContent = formatTime(audioEl.duration);
+    });
+
+    playBtn.addEventListener('click', () => {
+      if (audioEl.paused) {
+        audioEl.play();
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+      } else {
+        audioEl.pause();
+        playIcon.style.display = 'block';
+        pauseIcon.style.display = 'none';
       }
     });
-  };
 
-  return { init };
-})();
-
-/* ============================================================
-   3. SCROLL REVEAL
-   ============================================================ */
-const ScrollReveal = (() => {
-  const init = () => {
-    const targets = qsa('.reveal');
-    if (!targets.length) return;
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
-
-    targets.forEach(el => observer.observe(el));
-  };
-
-  return { init };
-})();
-
-/* ============================================================
-   4. BACK TO TOP
-   ============================================================ */
-const BackToTop = (() => {
-  let btn = null;
-
-  const toggle = (show) => {
-    if (btn) btn.classList.toggle('is-visible', show);
-  };
-
-  const init = () => {
-    btn = qs('.back-to-top');
-    if (!btn) return;
-    btn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    audioEl.addEventListener('timeupdate', () => {
+      timeCurrent.textContent = formatTime(audioEl.currentTime);
+      const percent = (audioEl.currentTime / audioEl.duration) * 100;
+      progressFill.style.width = `${percent}%`;
     });
-  };
 
-  return { init, toggle };
-})();
+    progressBar.addEventListener('click', (e) => {
+      const rect = progressBar.getBoundingClientRect();
+      const pos = (e.clientX - rect.left) / rect.width;
+      audioEl.currentTime = pos * audioEl.duration;
+    });
 
-/* ============================================================
-   5. CONTACT FORM
-   ============================================================ */
-const ContactForm = (() => {
-  const init = () => {
-    const forms = qsa('.contact-form__element, .js-contact-form');
-    forms.forEach(form => {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const toast = qs('.form-toast', form.closest('.contact-form') || form.parentElement);
-        if (toast) {
-          toast.style.display = 'block';
-          setTimeout(() => { toast.style.display = 'none'; }, 4000);
-        }
-        form.reset();
+    audioEl.addEventListener('ended', () => {
+      playIcon.style.display = 'block';
+      pauseIcon.style.display = 'none';
+      progressFill.style.width = '0%';
+      audioEl.currentTime = 0;
+    });
+  }
+
+  // Carrusel de ficha de proyecto
+  const track = document.querySelector('.carousel-track');
+  const dots = document.querySelectorAll('.dots span[data-slide]');
+  if (track && dots.length > 0) {
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        dots.forEach(d => d.classList.remove('active'));
+        dot.classList.add('active');
+        const slideIndex = parseInt(dot.getAttribute('data-slide'));
+        track.style.transform = `translateX(-${slideIndex * 100}%)`;
       });
     });
-  };
+  }
 
-  return { init };
-})();
+  // Simulación de datos en vivo SARCOM (variación leve de los valores)
+  const flowVal = document.querySelector('[data-live="flow"]');
+  if (flowVal) {
+    setInterval(() => {
+      const base = -246;
+      const jitter = (Math.random() * 6 - 3).toFixed(1);
+      flowVal.textContent = (base + parseFloat(jitter)).toFixed(1) + ' l/s';
+    }, 2600);
+  }
 
-/* ============================================================
-   6. COUNTER ANIMATION (Stats bar)
-   ============================================================ */
-const CounterAnimation = (() => {
-  const animateCounter = (el) => {
-    const target = parseFloat(el.getAttribute('data-target'));
-    const duration = 1800;
-    const start = performance.now();
-    const isFloat = target % 1 !== 0;
-
-    const tick = (now) => {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const ease = 1 - Math.pow(1 - progress, 3); // cubic ease-out
-      const value = target * ease;
-      el.textContent = isFloat ? value.toFixed(1) : Math.floor(value).toLocaleString('es-CL');
-      if (progress < 1) requestAnimationFrame(tick);
-    };
-
-    requestAnimationFrame(tick);
-  };
-
-  const init = () => {
-    const counters = qsa('[data-target]');
-    if (!counters.length) return;
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          animateCounter(entry.target);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.5 });
-
-    counters.forEach(el => observer.observe(el));
-  };
-
-  return { init };
-})();
-
-/* ============================================================
-   7. SARCOM CHART (Nivel Freático)
-   ============================================================ */
-const FreaticChart = (() => {
-  const draw = (canvas) => {
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const W = canvas.offsetWidth;
-    const H = canvas.offsetHeight;
-    canvas.width = W;
-    canvas.height = H;
-
-    // Data points (simulated)
-    const data = [-97, -94, -93, -97, -100, -98, -99, -100];
-    const labels = ['12:50', '1:00', '1:10', '1:20', '1:30', '1:40', '1:50', '2:00'];
-    const alertLevel = -99;
-
-    const minY = -101, maxY = -92;
-    const padX = 44, padY = 20;
-    const plotW = W - padX * 2;
-    const plotH = H - padY * 2;
-
-    const toX = (i) => padX + (i / (data.length - 1)) * plotW;
-    const toY = (v) => padY + ((v - maxY) / (minY - maxY)) * plotH;
-
-    // Background
-    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--color-bg-alt') || '#F4F8FB';
-    ctx.fillRect(0, 0, W, H);
-
-    // Grid lines
-    ctx.strokeStyle = 'rgba(100,140,170,0.2)';
-    ctx.lineWidth = 1;
-    for (let v = -100; v <= -93; v++) {
-      const y = toY(v);
-      ctx.beginPath();
-      ctx.moveTo(padX, y);
-      ctx.lineTo(W - padX, y);
-      ctx.stroke();
-
-      // Y labels
-      ctx.fillStyle = '#7BAFC8';
-      ctx.font = '11px Barlow, sans-serif';
-      ctx.textAlign = 'right';
-      ctx.fillText(v, padX - 6, y + 4);
-    }
-
-    // Alert line
-    ctx.strokeStyle = '#E74C3C';
-    ctx.lineWidth = 1.5;
-    ctx.setLineDash([6, 4]);
-    const alertY = toY(alertLevel);
-    ctx.beginPath();
-    ctx.moveTo(padX, alertY);
-    ctx.lineTo(W - padX, alertY);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Area fill
-    const grad = ctx.createLinearGradient(0, padY, 0, H - padY);
-    grad.addColorStop(0, 'rgba(0,119,182,0.25)');
-    grad.addColorStop(1, 'rgba(0,119,182,0.02)');
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.moveTo(toX(0), toY(data[0]));
-    data.forEach((v, i) => ctx.lineTo(toX(i), toY(v)));
-    ctx.lineTo(toX(data.length - 1), H - padY);
-    ctx.lineTo(toX(0), H - padY);
-    ctx.closePath();
-    ctx.fill();
-
-    // Line
-    ctx.strokeStyle = '#0077B6';
-    ctx.lineWidth = 2.5;
-    ctx.lineJoin = 'round';
-    ctx.beginPath();
-    ctx.moveTo(toX(0), toY(data[0]));
-    data.forEach((v, i) => ctx.lineTo(toX(i), toY(v)));
-    ctx.stroke();
-
-    // Dots + X labels
-    data.forEach((v, i) => {
-      const x = toX(i), y = toY(v);
-      ctx.beginPath();
-      ctx.arc(x, y, 4, 0, Math.PI * 2);
-      ctx.fillStyle = '#0077B6';
-      ctx.fill();
-      ctx.strokeStyle = '#fff';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      ctx.fillStyle = '#7BAFC8';
-      ctx.font = '10px Barlow, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(labels[i], x, H - 4);
-    });
-  };
-
-  // Animate counters on SARCOM page
-  const animateMetric = (el) => {
-    if (!el) return;
-    const target = parseFloat(el.getAttribute('data-value'));
-    if (isNaN(target)) return;
-    const suffix = el.getAttribute('data-suffix') || '';
-    const duration = 2000;
-    const start = performance.now();
-
-    const tick = (now) => {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const ease = 1 - Math.pow(1 - progress, 3);
-      const val = target * ease;
-      el.textContent = Math.abs(val) < 1 && target !== 0
-        ? val.toFixed(2)
-        : (target < 0 ? '-' : '') + Math.abs(Math.floor(val)).toLocaleString('es-CL') + suffix;
-      if (progress < 1) requestAnimationFrame(tick);
-    };
-
-    requestAnimationFrame(tick);
-  };
-
-  const init = () => {
-    const canvas = qs('#freaticChart');
-    if (canvas) {
-      draw(canvas);
-      window.addEventListener('resize', () => draw(canvas));
-      // Redraw on theme toggle
-      qsa('[data-theme-toggle]').forEach(btn => {
-        btn.addEventListener('click', () => setTimeout(() => draw(canvas), 350));
-      });
-    }
-
-    // Animate metric values
-    qsa('[data-value]').forEach(el => {
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            animateMetric(entry.target);
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.5 });
-      observer.observe(el);
-    });
-  };
-
-  return { init };
-})();
-
-/* ============================================================
-   8. PROJECTS GALLERY (hover details)
-   ============================================================ */
-const ProjectsGallery = (() => {
-  const init = () => {
-    // Already handled by CSS hover states
-    // Could add lightbox here in the future
-  };
-  return { init };
-})();
-
-/* ============================================================
-   INIT
-   ============================================================ */
-document.addEventListener('DOMContentLoaded', () => {
-  ThemeManager.init();
-  Navbar.init();
-  ScrollReveal.init();
-  BackToTop.init();
-  ContactForm.init();
-  CounterAnimation.init();
-  FreaticChart.init();
-  ProjectsGallery.init();
+  // Gráfico de nivel freático (SVG simple sin librerías)
+  const chart = document.querySelector('#nivel-chart');
+  if (chart) {
+    const points = [22, 30, 38, 46, 40, 30, 22, 16, 12, 18, 14, 10];
+    const w = 640, h = 200, pad = 10;
+    const step = (w - pad * 2) / (points.length - 1);
+    const max = Math.max(...points), min = Math.min(...points);
+    const scaled = points.map(p => h - pad - ((p - min) / (max - min)) * (h - pad * 2));
+    const path = scaled.map((y, i) => `${i === 0 ? 'M' : 'L'} ${pad + i * step} ${y}`).join(' ');
+    const area = `${path} L ${pad + (points.length - 1) * step} ${h - pad} L ${pad} ${h - pad} Z`;
+    const alertY = h - pad - ((14 - min) / (max - min)) * (h - pad * 2);
+    chart.innerHTML = `
+      <svg viewBox="0 0 ${w} ${h}" width="100%" height="220" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#12a2d6" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#12a2d6" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="${area}" fill="url(#areaFill)" />
+        <path d="${path}" fill="none" stroke="#12a2d6" stroke-width="2.5" />
+        <line x1="${pad}" y1="${alertY}" x2="${w-pad}" y2="${alertY}" stroke="#f0a53c" stroke-width="1.5" stroke-dasharray="5 5" />
+      </svg>`;
+  }
 });
