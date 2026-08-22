@@ -1,4 +1,4 @@
-﻿/* =========================================================
+/* =========================================================
    RÃO LONGAVÃ â€” Sistema de diseÃ±o
    Tema: ingenierÃ­a hÃ­drica / topografÃ­a de cuenca fluvial
    Tipos: Space Grotesk (display) + Inter (texto) + IBM Plex Mono (datos)
@@ -155,7 +155,7 @@ p{margin:0;}
 
 @media (max-width: 960px){
   .nav{
-    position:fixed;inset:90px 0 0 0;background:var(--navy-900);
+    position:absolute;top:90px;left:0;right:0;height:calc(100vh - 90px);background:var(--navy-900);
     flex-direction:column;justify-content:flex-start;padding:36px 28px;gap:22px;
     transform:translateX(100%);transition:transform .3s ease;
   }
@@ -661,3 +661,7 @@ p{margin:0;}
 
 
 
+
+/* Global responsive fixes */
+html, body { overflow-x: hidden; }
+img { max-width: 100%; height: auto; display: block; }
