@@ -12,8 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
   }
 
-  );
-  }
 
   // Acordeón de preguntas frecuentes
   document.querySelectorAll('.faq-item').forEach(item => {
