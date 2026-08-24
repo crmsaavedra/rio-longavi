@@ -665,3 +665,5 @@ p{margin:0;}
 /* Global responsive fixes */
 html, body { overflow-x: hidden; }
 img { max-width: 100%; height: auto; display: block; }
+
+.avatar img { object-position: top; }
