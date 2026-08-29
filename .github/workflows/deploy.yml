@@ -1,4 +1,4 @@
-name: Deploy Website via FTP
+﻿name: Deploy Website via FTP
 
 on:
   push:
@@ -21,3 +21,4 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: /public_html/
+        state-name: .ftp-deploy-sync-state-v2.json
