@@ -568,7 +568,7 @@ p{margin:0;}
 /* ---- SARCOM section con imagen de fondo ---- */
 .section--dark[style*="background-image"]{
   background-size:cover;
-  background-position:center 10% !important;
+  background-position:center 20% !important;
   position:relative;
 }
 .section--dark[style*="background-image"]::before{
