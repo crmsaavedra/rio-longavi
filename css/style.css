@@ -554,7 +554,7 @@ p{margin:0;}
 /* ---- Page hero con imagen de fondo real ---- */
 .page-hero[style*="background-image"]{
   background-size:cover;
-  background-position:center 0% !important;
+  background-position:center 35% !important;
 }
 .page-hero .contour{z-index:0;}
 .page-hero-inner{position:relative;z-index:1;}
@@ -562,13 +562,13 @@ p{margin:0;}
 /* ---- CTA band con imagen de fondo ---- */
 .cta-band[style*="background-image"]{
   background-size:cover;
-  background-position:center 0% !important;
+  background-position:center 35% !important;
 }
 
 /* ---- SARCOM section con imagen de fondo ---- */
 .section--dark[style*="background-image"]{
   background-size:cover;
-  background-position:center 0% !important;
+  background-position:center 15% !important;
   position:relative;
 }
 .section--dark[style*="background-image"]::before{
