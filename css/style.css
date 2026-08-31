@@ -674,5 +674,4 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* Floating Badge */
 .floating-badge { position: fixed; bottom: 30px; right: 30px; background: var(--cyan-500); color: var(--white); padding: 12px 24px; border-radius: 999px; font-weight: 600; box-shadow: 0 6px 16px rgba(0,0,0,0.15); z-index: 9999; font-size: 14px; display: flex; align-items: center; gap: 8px; pointer-events: none; }
-.floating-badge::before { content: '??'; font-size: 16px; }
 @media(max-width: 768px) { .floating-badge { bottom: 20px; right: 20px; padding: 10px 20px; font-size: 13px; } }
