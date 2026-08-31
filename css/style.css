@@ -109,6 +109,9 @@ p{margin:0;}
 .btn-outline{border-color:var(--navy-700);color:var(--navy-900);}
 .btn-outline:hover{background:var(--navy-900);color:var(--white);}
 .btn-sm{padding:9px 18px;font-size:12.5px;}
+.btn-login{background:var(--navy-800);color:var(--cyan-500);border-color:var(--navy-700);padding:8px 18px;font-size:12.5px;gap:6px;}
+.btn-login:hover{background:var(--navy-700);color:var(--white);}
+.btn-login svg{width:16px;height:16px;}
 .btn svg{width:14px;height:14px;}
 
 /* ---------- Header ---------- */
