@@ -182,7 +182,7 @@ p{margin:0;}
   position:relative;
   background:linear-gradient(180deg, rgba(7,27,46,.55), rgba(7,27,46,.88)), var(--navy-800);
   color:var(--white);
-  padding:90px 0 96px;
+  padding:140px 0;
   overflow:hidden;
 }
 .page-hero .contour{position:absolute;inset:0;opacity:.35;pointer-events:none;background-image:var(--contour-svg);background-size:cover;background-position:center;}
