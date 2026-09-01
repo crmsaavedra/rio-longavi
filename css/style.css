@@ -182,7 +182,7 @@ p{margin:0;}
   position:relative;
   background:linear-gradient(180deg, rgba(7,27,46,.55), rgba(7,27,46,.88)), var(--navy-800);
   color:var(--white);
-  padding:40px 0 46px;
+  padding:90px 0 96px;
   overflow:hidden;
 }
 .page-hero .contour{position:absolute;inset:0;opacity:.35;pointer-events:none;background-image:var(--contour-svg);background-size:cover;background-position:center;}
@@ -307,7 +307,7 @@ p{margin:0;}
 /* ---------- CTA banner ---------- */
 .cta-band{
   background:var(--navy-900);color:var(--white);
-  padding:64px 0;text-align:center;
+  padding:100px 0;text-align:center;
   position:relative;overflow:hidden;
 }
 .cta-band .contour{position:absolute;inset:0;opacity:.25;background-image:var(--contour-svg);background-size:cover;background-position:center;}
@@ -567,6 +567,7 @@ p{margin:0;}
 
 /* ---- SARCOM section con imagen de fondo ---- */
 .section--dark[style*="background-image"]{
+  padding: 110px 0 !important;
   background-size:cover;
   background-position:center 25% !important;
   position:relative;
