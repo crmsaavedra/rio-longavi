@@ -133,9 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const flowVal = document.querySelector('[data-live="flow"]');
   if (flowVal) {
     setInterval(() => {
-      const base = -246;
-      const jitter = (Math.random() * 6 - 3).toFixed(1);
-      flowVal.textContent = (base + parseFloat(jitter)).toFixed(1) + ' l/s';
+      const flow = 100 + Math.random() * 100;
+      flowVal.textContent = flow.toFixed(1) + ' l/s';
     }, 2600);
   }
 
