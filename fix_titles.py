@@ -31,12 +31,7 @@ for filepath in glob.glob('*.html'):
 
     content = re.sub(r'<title>.*?</title>', remove_accents_title, content, flags=re.DOTALL)
     
-    # Check floating badge in servicios.html
-    if 'servicios.html' in filepath:
-        if 'floating-badge' not in content:
-            content = content.replace('</body>', '<div class="floating-badge">Competitivo en el mercado</div>\n</body>')
-
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(content)
 
-print("Titles cleaned and badge added to servicios.html")
+print("Titles cleaned")

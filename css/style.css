@@ -170,7 +170,6 @@ p{margin:0;}
   .nav .mobile-login{display:block;margin-top:8px;padding-top:18px;border-top:1px solid rgba(255,255,255,.2);color:var(--cyan-300);}
   .header-actions .btn-login{display:none;}
   .nav-toggle{display:flex;align-items:center;justify-content:center;flex:none;width:44px;height:44px;}
-  body.menu-open .floating-badge{visibility:hidden;}
 }
 @media (max-width: 620px){
   .site-header .wrap{height:72px;padding:0 16px;gap:12px;}
@@ -694,6 +693,15 @@ img { max-width: 100%; height: auto; display: block; }
 .avatar img { object-position: top; }
 
 
-/* Floating Badge */
-.floating-badge { position: fixed; top: 100px; right: 30px; background: var(--cyan-500); color: var(--white); padding: 12px 24px; border-radius: 999px; font-weight: 600; box-shadow: 0 6px 16px rgba(0,0,0,0.15); z-index: 9999; font-size: 14px; display: flex; align-items: center; gap: 8px; pointer-events: none; }
-@media(max-width: 768px) { .floating-badge { top: 80px; right: 20px; padding: 10px 20px; font-size: 13px; } }
+.team-photo {
+  margin: 0 0 34px;
+  border-radius: 18px;
+  overflow: hidden;
+}
+.team-photo img {
+  width: 100%;
+  height: auto;
+  border-radius: inherit;
+}
+
+\n

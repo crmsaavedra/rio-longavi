@@ -1,16 +1,13 @@
-import os
-import glob
+from pathlib import Path
+import re
 
-html_files = glob.glob('*.html')
-badge_html = '\n<div class="floating-badge">Competitivo en el mercado</div>\n'
+badge = re.compile(r'(?m)^[ \t]*<div class="floating-badge">Competitivo en el mercado</div>[ \t]*\r?\n?')
+removed = 0
+for page in Path(".").glob("*.html"):
+    content = page.read_text(encoding="utf-8")
+    updated, count = badge.subn("", content)
+    if count:
+        page.write_text(updated, encoding="utf-8", newline="")
+        removed += count
 
-for file in html_files:
-    with open(file, 'r', encoding='utf-8') as f:
-        content = f.read()
-    
-    if 'floating-badge' not in content:
-        content = content.replace('</body>', badge_html + '</body>')
-        with open(file, 'w', encoding='utf-8') as f:
-            f.write(content)
-
-print("Done inserting badges.")
+print(f"Removed {removed} floating badges.")
